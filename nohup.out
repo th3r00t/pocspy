@@ -1,0 +1,44 @@
+error walking file system: FileNotFoundError [Errno 2] No such file or directory: '/mnt/homeserver/logs'
+error walking file system: FileNotFoundError [Errno 2] No such file or directory: '/mnt/homeserver/logs'
+Traceback (most recent call last):
+  File "./start.py", line 24, in <module>
+    loop.run_until_complete(Dispatcher.startWatcher())
+  File "/usr/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+    return future.result()
+  File "/opt/pocspy/src/modules.py", line 132, in startWatcher
+    self.triggerHook()
+  File "/opt/pocspy/src/modules.py", line 135, in triggerHook
+    pages = self.pager.queryset(all=False)
+  File "/opt/pocspy/src/modules.py", line 65, in queryset
+    pages = self.parse_pages(all)
+  File "/opt/pocspy/src/modules.py", line 46, in parse_pages
+    _pages = self.get_raw_pages(all)
+  File "/opt/pocspy/src/modules.py", line 41, in get_raw_pages
+    files = self.sort_files()
+  File "/opt/pocspy/src/modules.py", line 24, in sort_files
+    return sorted(self.get_files(),   key=os.path.getmtime)
+  File "/opt/pocspy/src/modules.py", line 19, in get_files
+    for _fn in os.scandir(self._log_dir):
+FileNotFoundError: [Errno 2] No such file or directory: '/mnt/homeserver/logs'
+error walking file system: FileNotFoundError [Errno 2] No such file or directory: '/mnt/homeserver/logs'
+error walking file system: FileNotFoundError [Errno 2] No such file or directory: '/mnt/homeserver/logs'
+Traceback (most recent call last):
+  File "./start.py", line 24, in <module>
+    loop.run_until_complete(Dispatcher.startWatcher())
+  File "/usr/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+    return future.result()
+  File "/opt/pocspy/src/modules.py", line 132, in startWatcher
+    self.triggerHook()
+  File "/opt/pocspy/src/modules.py", line 135, in triggerHook
+    pages = self.pager.queryset(all=False)
+  File "/opt/pocspy/src/modules.py", line 65, in queryset
+    pages = self.parse_pages(all)
+  File "/opt/pocspy/src/modules.py", line 46, in parse_pages
+    _pages = self.get_raw_pages(all)
+  File "/opt/pocspy/src/modules.py", line 41, in get_raw_pages
+    files = self.sort_files()
+  File "/opt/pocspy/src/modules.py", line 24, in sort_files
+    return sorted(self.get_files(),   key=os.path.getmtime)
+  File "/opt/pocspy/src/modules.py", line 19, in get_files
+    for _fn in os.scandir(self._log_dir):
+FileNotFoundError: [Errno 2] No such file or directory: '/mnt/homeserver/logs'

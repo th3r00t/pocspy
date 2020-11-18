@@ -6,7 +6,7 @@ from src.modules import PocSpyStorage
 from src.modules import PocSpyDispatcher
 
 ROOT = os.path.dirname(__file__)  # Set Project Root
-LOGS = '/home/raelon/mnt/homeserver/logs'  # Set Log file directory
+LOGS = '/mnt/homeserver/logs'  # Set Log file directory
 Storage = PocSpyStorage(ROOT)  # Initialize storage system
 Pager = PocSpyPages(LOGS)  # Start paging system
 Dispatcher = PocSpyDispatcher(LOGS, Pager, Storage)  # Start dispatcher
@@ -19,7 +19,7 @@ for page in _pages:
     Storage.insert(page)  # Insert each page in _pages
 Storage.commit()  # Commit the transaction
 
-# Dispatcher.startWatcher()  # Start the watcher service 
+# Dispatcher.startWatcher()  # Start the watcher service
 loop = asyncio.get_event_loop()
 loop.run_until_complete(Dispatcher.startWatcher())
 

@@ -92,8 +92,8 @@ class PocSpyStorage:
     def create_tables(self):
         self.c.execute(
             """CREATE TABLE IF NOT EXISTS pages
-                    (pager int,   time timestamp,  date date,  mode text, 
-                    modetype text,   bits int,  sender text,  addr text,  msg text, 
+                    (pager int,   time timestamp,  date date,  mode text,
+                    modetype text,   bits int,  sender text,  addr text,  msg text,
                     md5hash blob,   UNIQUE(md5hash)
                     )"""
         )
@@ -137,7 +137,7 @@ class PocSpyDispatcher:
             msg = ""
             self.storage.insert(page)
             for i in page: msg = msg + " | " + i
-        print(msg)
+        # print(msg)
         self.storage.commit()
 
     def stopWatcher(self):

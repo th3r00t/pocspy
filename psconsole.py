@@ -1,25 +1,18 @@
 #!/usr/bin/env python
-"""
-A few examples of displaying a bottom toolbar.
-
-The ``prompt`` function takes a ``bottom_toolbar`` attribute.
-This can be any kind of formatted text (plain text, HTML or ANSI), or
-it can be a callable that takes an App and returns an of these.
-
-The bottom toolbar will always receive the style 'bottom-toolbar', and the text
-inside will get 'bottom-toolbar.text'. These can be used to change the default
-style.
-"""
 import sqlite3
-from prompt_toolkit import prompt
-from prompt_toolkit.formatted_text import HTML
-from prompt_toolkit.styles import Style
+import asyncio
+from src.modules import UI
 
 QUERY = "SELECT * FROM pages"
+LENGTH = 0
+LAST_LENGTH = 0
+FIRST_RUN = 1
+INTERFACE = None
+
 
 class Data:
     def __init__(self):
-        self.db = 'recon.sqlite3'
+        self.db = "recon.sqlite3"
 
     def connection(self):
         return sqlite3.connect(self.db)
@@ -28,29 +21,40 @@ class Data:
         return self.connection().execute(QUERY)
 
 
-def bottom_bar(count=0, matches=0):
-    style = Style.from_dict(
-        {
-            "bottom-toolbar": "#aaaa00 bg:#ff0000",
-            "bottom-toolbar.text": "#aaaa44 bg:#aa4444",
-        }
-    )
-    text = prompt(
-        "> ",
-        bottom_toolbar=HTML(
-            f'  <b>Page Count: <i>{count}</i> Search Matches: <i>{matches}</i></b>'),
-        style=style
-    )
-    print("You said: %s" % text)
-
-
-def main():
-    data = Data()
+async def update_pages(data):
+    global LENGTH
+    global LAST_LENGTH
+    global FIRST_RUN
+    global INTERFACE
     while True:
         r = data.results().fetchall()
-        for i in r:
-            print(f'{i[2]} {i[1]} {i[8]}')
-        bottom_bar(r.__len__())
+        if FIRST_RUN:
+            FIRST_RUN = 0
+            r.reverse()
+            INTERFACE = UI().main()
+        if LENGTH == 0:
+            LENGTH = r.__len__()
+        if r.__len__() > LAST_LENGTH:
+            LENGTH = r.__len__()
+            _num_new = LENGTH - LAST_LENGTH
+            LAST_LENGTH = LENGTH
+            while _num_new > 0:
+                _page = r.pop()
+                INTERFACE.out_main.addstr(f"{_page[2]} {_page[1]} {_page[8]}\n")
+                INTERFACE.out_main.refresh()
+                INTERFACE.in_main.refresh()
+                _num_new = _num_new - 1
+            INTERFACE.in_main.clear()
+            INTERFACE.in_main.border(0)
+            INTERFACE.in_main.addstr(1, 2, f"Pages {LENGTH}")
+            INTERFACE.in_main.refresh()
+        await asyncio.sleep(5)
 
-if __name__ == "__main__":
-    main()
+
+async def main():
+    data = Data()
+    data_loop = asyncio.create_task(update_pages(data))
+    await data_loop
+
+
+asyncio.run(main())
